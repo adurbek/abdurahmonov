@@ -7,6 +7,7 @@ import Marquee from "./components/marquee";
 import Me from "./components/me";
 import Portfolio from "./components/portfolio";
 import Services from "./components/services";
+import NotFound from "./not-found";
 
 
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Services />
       <Me />
       <Contact />
+     
     </>
 
   );

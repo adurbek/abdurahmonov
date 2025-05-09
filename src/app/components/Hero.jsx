@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 const ParticlesBackground = () => {
@@ -53,6 +55,10 @@ const ParticlesBackground = () => {
 };
 
 function Hero() {
+  useEffect(() => {
+    AOS.init({ duration: 1000, easing: "ease-in-out", once: true });
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 lg:px-8 overflow-hidden">
       <ParticlesBackground />
@@ -77,11 +83,17 @@ function Hero() {
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
-            href="#"
+            href="mailto:adurbek10@gmail.com"
             className="relative inline-flex items-center px-6 py-3 rounded-full bg-indigo-600 text-white font-semibold overflow-hidden group"
           >
-            <span className="relative z-10"><a href="mailto:adurbek10@gmail.com">Email</a></span>
+            <span className="relative z-10">Email</span>
             <span className="absolute inset-0 bg-indigo-700 scale-x-0 group-hover:scale-x-100 transform origin-left transition-transform duration-300"></span>
+          </a>
+          <a
+            href="/#portfolio"
+            className="relative inline-flex items-center px-6 py-3 rounded-full bg-white text-indigo-600 font-semibold border-2 border-indigo-600 hover:bg-indigo-50 transition-colors duration-300"
+          >
+            View Portfolio
           </a>
         </div>
 
