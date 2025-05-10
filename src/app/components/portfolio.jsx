@@ -8,38 +8,30 @@ import cafe from "../img/cafe.png";
 import test from "../img/test.png";
 import hotel from "../img/hotel.png";
 import trevel from "../img/trevel.png";
-import coursera from "../img/coursera.jpg"
-import certificate from "../img/certificate.jpg"
+import coursera from "../img/coursera.jpg";
+import certificate from "../img/certificate.jpg";
 
 function Portfolio() {
   const [activeSection, setActiveSection] = useState("web");
+  const [isDesktop, setIsDesktop] = useState(false);
 
-  // AOS ni faqat desktopda ishga tushirish
   useEffect(() => {
-    // Ekran kengligini tekshirish
-    const isDesktop = window.innerWidth >= 768; // 768px - md breakpoint
-
-    if (isDesktop) {
-      AOS.init({
-        duration: 500,
-        easing: "ease-in-out",
-        once: true,
-      });
-    }
-
-    // Agar ekran o'lchami o'zgarsa, AOS ni to'g'ri boshqarish uchun cleanup
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        AOS.refreshHard(); // AOS ni o'chirish uchun refresh
-      } else if (!AOS.initialized) {
+      const desktop = window.innerWidth >= 768;
+      setIsDesktop(desktop);
+
+      if (desktop) {
         AOS.init({
           duration: 500,
           easing: "ease-in-out",
           once: true,
         });
+      } else {
+        AOS.refreshHard();
       }
     };
 
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -50,7 +42,7 @@ function Portfolio() {
         Portfolio
       </h2>
 
-      {/* Tugmalar */}
+      {/* Buttons */}
       <div className="mt-4 flex flex-wrap gap-4 p-3 w-full md:w-1/2 justify-center">
         <button
           onClick={() => setActiveSection("web")}
@@ -83,9 +75,9 @@ function Portfolio() {
         </button>
       </div>
 
-      {/* Web Section */}
+      {/* Web Section - Original image sizes */}
       {activeSection === "web" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 w-full">
           {[
             { src: center, alt: "it center" },
             { src: cafe, alt: "cafe" },
@@ -96,43 +88,53 @@ function Portfolio() {
           ].map((item, index) => (
             <div
               key={index}
-              className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
-              data-aos={window.innerWidth >= 768 ? "fade-right" : undefined} // Mobil uchun AOS o'chirildi
-              data-aos-delay={window.innerWidth >= 768 ? index * 100 : undefined}
+              className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-white p-2 flex items-center justify-center"
+              data-aos={isDesktop ? "fade-right" : undefined}
+              data-aos-delay={isDesktop ? index * 100 : undefined}
             >
-              <Image
-                className="w-full h-auto hover:scale-105 transition-transform duration-300 object-cover"
-                src={item.src}
-                alt={item.alt}
-                width={500}
-                height={300}
-                priority={index < 3}
-              />
+              <div className="relative w-full h-auto max-h-[300px] flex items-center justify-center">
+                <Image
+                  className="object-contain max-h-[300px]"
+                  src={item.src}
+                  alt={item.alt}
+                  width={500}
+                  height={300}
+                  priority={index < 3}
+                  style={{
+                    width: 'auto',
+                    height: 'auto',
+                    maxWidth: '100%',
+                    maxHeight: '300px'
+                  }}
+                />
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Certificate Section */}
+      {/* Certificate Section - Uniform sizes */}
       {activeSection === "certificate" && (
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 w-full">
           {[
             { src: certificate, alt: "it center certificate" },
             { src: coursera, alt: "youtube certificate" },
           ].map((item, index) => (
             <div
               key={index}
-              className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
-              data-aos={window.innerWidth >= 768 ? "fade-up" : undefined} // Mobil uchun AOS o'chirildi
-              data-aos-delay={window.innerWidth >= 768 ? index * 200 : undefined}
+              className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 aspect-[4/3]"
+              data-aos={isDesktop ? "fade-up" : undefined}
+              data-aos-delay={isDesktop ? index * 200 : undefined}
             >
-              <Image
-                className="w-full h-auto hover:scale-105 transition-transform duration-300 object-cover"
-                src={item.src}
-                alt={item.alt}
-                width={600}
-                height={500}
-              />
+              <div className="w-full h-full relative">
+                <Image
+                  className="object-cover"
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </div>
           ))}
         </div>
